@@ -1,0 +1,21 @@
+{
+  "name": "ue01",
+  "version": "1.0.0",
+  "description": "Uebung 1",
+  "main": "main.js",
+  "repository": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "Mario Ritter",
+  "license": "ISC",
+  "dependencies": {
+    "sprintf-js": "^1.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^2.5.2"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "la1_ue02 REST-SERVER",
+  "version": "1.0.0",
+  "description": "Project Template for Node.js/Typescript FIVU 5AHME",
+  "main": "dist/main.js",
+  "repository": {},
+  "scripts": {
+    "clean": "./node_modules/gulp/bin/gulp.js clean",
+    "build": "./node_modules/gulp/bin/gulp.js build",
+    "prestart": "./node_modules/gulp/bin/gulp.js cleanAndBuild",
+    "start": "node dist/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ritter Mario",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^8.0.31",
+    "@types/sprintf-js": "^1.1.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "save": "^2.3.1",
+    "sprintf-js": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.7",
+    "@types/express": "^4.0.39",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-changed": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-tslint": "^8.1.2",
+    "gulp-typescript": "^3.2.2",
+    "gulp-using": "^0.1.1",
+    "merge-stream": "^1.0.1",
+    "path": "^0.12.7",
+    "run-sequence": "^2.2.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3"
+  }
+}
