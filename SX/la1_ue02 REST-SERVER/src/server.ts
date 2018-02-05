@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser';
 import { Db } from './db';
 import { IPerson } from './person';
 import { Person } from './person';
+import { DbMongo } from './db-mongo';
 export class Server {
 
     private _server: express.Express;
@@ -36,45 +37,49 @@ export class Server {
         res.status(404).send('Not found');
         // next();
     }
-    private httpGetPerson(req: express.Request, res: express.Response, next: express.NextFunction): any {
-        if ( !req.query || !req.query.id) {
-            res.status(400).send('Bad request');
-            return;
-        }
+    private async httpGetPerson(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+        try {
 
-        const ids = Array.isArray(req.query.id) ? req.query.id : [req.query.id];
-
-        const rv: IPerson [] = [];
-
-        for (const id of ids) {
-            const p = Db.instance.getPerson(id);
-            if (p !== undefined) {
-                rv.push(p.toObject());
-            } else {
-                res.status(404).send('Not found');
+            if ( !req.query || !req.query.id) {
+                res.status(400).send('Bad request');
                 return;
             }
-        }
-        if (rv.length === 1) {
-            res.json(rv[0]);
-        } else {
-            res.json(rv);
-        }
 
+            const ids = Array.isArray(req.query.id) ? req.query.id : [req.query.id];
+
+            const rv: IPerson [] = [];
+
+            for (const id of ids) {
+                const p = await DbMongo.Instance.getPerson(id);
+                if (p !== undefined) {
+                    rv.push(p.toObject());
+                } else {
+                    res.status(404).send('Not found');
+                    return;
+                }
+            }
+            if (rv.length === 1) {
+                res.json(rv[0]);
+            } else {
+                res.json(rv);
+            }
+        } catch (err) {
+            res.status(400).send(err.message).end();
+        }
     }
 
-    private httpPostPerson(req: express.Request, res: express.Response, next: express.NextFunction): any {
+    private async httpPostPerson(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
         try {
             const p: IPerson = req.body;
             const person = new Person (p);
-            Db.instance.putPerson(person);
+            const id = DbMongo.Instance.addPerson(person);
             res.end();
         }catch (err) {
             res.status(400).send(err.message).end();
         }
     }
 
-    private httpPutPerson(req: express.Request, res: express.Response, next: express.NextFunction): any {
+    private async httpPutPerson(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
         try {
             const id = req.query.id;
             const p = Db.instance.getPerson(id);
@@ -82,16 +87,16 @@ export class Server {
                 throw new Error('invalid id ' + id);
             }
             const pBody: any = req.body;
-            Db.instance.modifyPerson(id, pBody);
+            await DbMongo.Instance.modifyPerson(new Person(pBody));
             res.end();
         }catch (err) {
             res.status(400).send(err.message).end();
         }
     }
-    private httpDeletePerson(req: express.Request, res: express.Response, next: express.NextFunction): any {
+    private async httpDeletePerson(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
         try {
             const id  = req.query.id;
-            const p = Db.instance.deletePerson(id);
+            const p = await DbMongo.Instance.deletePerson(id);
             if (!p) {
                 throw new Error('invalid id ' + id);
             }

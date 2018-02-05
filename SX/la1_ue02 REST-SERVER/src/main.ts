@@ -16,12 +16,16 @@ class Main {
         this._server = new Server();
         this._server.start(4711);
     }
+
+    public async run () {
+    }
 }
 
 const main = new Main();
 async function startup () {
     try {
-        main.start();
+        await main.start();
+        await main.run();
     } catch (err) {
         console.log(err);
     }
